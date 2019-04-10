@@ -1,5 +1,9 @@
 # miniui4rantcar
 # git 将项目推送到远程仓库：http://www.cnblogs.com/eaglezb/p/6602123.html
 # git提交命令
+git add .
+git commit -m ''
+git pull origin master
+git push origin master
 
 
