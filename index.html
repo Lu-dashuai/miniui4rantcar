@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8" />
+		<title></title>
+		<link href="css/demo.css" rel="stylesheet" type="text/css" />
+		<script src="scripts/boot.js" type="text/javascript"></script>
+		<style type="text/css">
+			body {
+				margin: 0;
+				padding: 0;
+				border: 0;
+				width: 100%;
+				height: 100%;
+				overflow: hidden;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="layout1" class="mini-layout" style="width:100%;height:100%;">
+			<!--顶部-->
+			<div class="app-header" region="north" height="70" showSplit="false" showHeader="false">
+				<h1 style="margin:0;padding:15px;cursor:default;font-family:微软雅黑,黑体,宋体;">大M孙子后台租车管理系统</h1>
+				<div style="position:absolute;top:12px;right:10px;">
+					<a class="mini-button mini-button-iconTop" iconCls="icon-add" onclick="onQuickClick" plain="true">快捷</a>
+					<a class="mini-button mini-button-iconTop" iconCls="icon-edit" onclick="onClick" plain="true">首页</a>
+					<a class="mini-button mini-button-iconTop" iconCls="icon-date" onclick="onClick" plain="true">消息</a>
+					<a class="mini-button mini-button-iconTop" iconCls="icon-edit" onclick="onClick" plain="true">设置</a>
+					<a class="mini-button mini-button-iconTop" iconCls="icon-close" onclick="onClick" plain="true">关闭</a>
+
+				</div>
+
+			</div>
+			<!--底部-->
+			<div title="south" region="south" showSplit="false" showHeader="false" height="30">
+				<div style="line-height:28px;text-align:center;cursor:default">Da M suizi </div>
+			</div>
+			<!--中间-->
+			<div title="center" region="center" style="border:0;" bodyStyle="overflow:hidden;">
+				<div class="mini-splitter" style="width:100%;height:100%;" borderStyle="border:0;">
+					<!--中间的左-->
+					<div size="180" maxSize="250" minSize="100" showCollapseButton="true" style="border:0;">
+						<!--权限菜单树-->
+						<div id="leftTree" class="mini-outlooktree" url="" onnodeclick="onNodeSelect" textField="text" idField="id" parentField="pid">
+						</div>
+					</div>
+					<!--中间的右-->
+					<div showCollapseButton="false" style="border:0;">
+						<!--标签栏-->
+						<div id="mainTabs" class="mini-tabs" activeIndex="1" style="width:100%;height:100%;" plain="false" onactivechanged="onTabsActiveChanged">
+							<div title="首页" url="../../docs/api/overview.html">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script type="text/javascript">
+			mini.parse();
+
+			var tree = mini.get("leftTree");
+			/*被js调用的用于tab的展示*/
+			function showTab(node) {
+				var tabs = mini.get("mainTabs");
+
+				var id = "tab$" + node.id;
+				var tab = tabs.getTab(id);
+				if(!tab) {
+					tab = {};
+					tab._nodeid = node.id;
+					tab.name = id;
+					tab.title = node.text;
+					tab.showCloseButton = true;
+
+					//这里拼接了url，实际项目，应该从后台直接获得完整的url地址
+					tab.url = mini_JSPath + "../../docs/api/" + node.id + ".html";
+
+					tabs.addTab(tab);
+				}
+				tabs.activeTab(tab);
+			}
+
+			function onNodeSelect(e) {
+				var node = e.node;
+				var isLeaf = e.isLeaf;
+
+				if(isLeaf) {
+					showTab(node);
+				}
+			}
+			/*首页等四个按钮*/
+			function onClick(e) {
+				var text = this.getText();
+				alert(text);
+			}
+			/*快捷按钮*/
+			function onQuickClick(e) {
+				tree.expandPath("datagrid");
+				tree.selectNode("datagrid");
+			}
+
+			function onTabsActiveChanged(e) {
+				var tabs = e.sender;
+				var tab = tabs.getActiveTab();
+				if(tab && tab._nodeid) {
+
+					var node = tree.getNode(tab._nodeid);
+					if(node && !tree.isSelectedNode(node)) {
+						tree.selectNode(node);
+					}
+				}
+			}
+		</script>
+	</body>
+
+</html>
